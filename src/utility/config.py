@@ -25,11 +25,7 @@ class AppSettings:
 	DB_SCHEMA: str = "taskmgr_plstc"
 
 	UVICORN_PORT: int = 8000
-	
-	JWT_SECRET: str = secrets.token_urlsafe(32)
-	JWT_ALG: str = "HS256"
-	JWT_EXPIRES: int = 3600
-
+ 
 	def __init__(self):
 		load_dotenv()
 
