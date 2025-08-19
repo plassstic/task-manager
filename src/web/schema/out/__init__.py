@@ -5,3 +5,9 @@
 
 
 """
+from .task import TaskSO
+
+
+__all__ = [
+	"TaskSO"
+]

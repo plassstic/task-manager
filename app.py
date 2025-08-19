@@ -5,6 +5,7 @@ from starlette.responses import JSONResponse
 
 from src.database import close_db, init_db
 from src.web.api import main_router
+from src.web.api.exception import apply_exception_handler
 
 
 @asynccontextmanager
@@ -21,6 +22,8 @@ app.include_router(
 	main_router,
 	prefix="/api"
 )
+apply_exception_handler(app)
+
 
 @app.get("/health")
 async def _():

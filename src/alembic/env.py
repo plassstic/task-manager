@@ -5,7 +5,7 @@ from sqlalchemy import pool, text
 
 from alembic import context
 
-from src.config import get_cached_settings
+from src.utility import get_cached_settings
 from src.database.model import BaseDBM
 
 config = context.config

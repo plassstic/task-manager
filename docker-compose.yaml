@@ -1,7 +1,7 @@
 #file: noinspection HttpUrlsUsage
 services:
   pg:
-    container_name: prf_postgres
+    container_name: taskmgr_postgres
     image: postgres:latest
 
     env_file:
@@ -29,7 +29,7 @@ services:
     restart: "unless-stopped"
 
   alembic:
-    container_name: prf_alembic
+    container_name: taskmgr_alembic
     build:
       context: .
       dockerfile: Dockerfile
@@ -51,7 +51,7 @@ services:
     restart: "no"
 
   web:
-    container_name: prf_web
+    container_name: taskmgr_web
     build:
       context: .
       dockerfile: Dockerfile

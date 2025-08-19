@@ -2,8 +2,9 @@ import secrets
 from dataclasses import dataclass
 from functools import lru_cache
 from os import getenv
-from loguru import logger
+
 from dotenv import load_dotenv
+from loguru import logger
 
 
 @dataclass
@@ -21,8 +22,10 @@ class AppSettings:
 	POSTGRES_PORT: str = "5432"
 	POSTGRES_DB: str = "testdb"
 	POSTGRES_ECHO: bool = False
-	DB_SCHEMA: str = "plassstic_template"
+	DB_SCHEMA: str = "taskmgr_plstc"
 
+	UVICORN_PORT: int = 8000
+	
 	JWT_SECRET: str = secrets.token_urlsafe(32)
 	JWT_ALG: str = "HS256"
 	JWT_EXPIRES: int = 3600
@@ -75,7 +78,8 @@ class AppSettings:
 	def postgres_sync_uri(self):
 		return self.postgres_async_uri.replace("+asyncpg", "")
 
-
+	def test_api_base(self, path):
+		return f"http://localhost:{self.UVICORN_PORT}/api{path}"
 
 @lru_cache
 def get_cached_settings() -> AppSettings:

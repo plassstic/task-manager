@@ -1,6 +1,7 @@
-from .base import BaseDBM, RemoveBaseAttrs
-
+from .base import BaseDBM
+from .task import TaskDBM
 
 __all__ = [
-	"BaseDBM", "RemoveBaseAttrs"
+	"BaseDBM",
+	"TaskDBM"
 ]

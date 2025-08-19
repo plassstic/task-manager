@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import (
 	create_async_engine,
 )
 
-from src.config import get_cached_settings
+from src.utility.config import get_cached_settings
 
 global engine, session_factory
 
