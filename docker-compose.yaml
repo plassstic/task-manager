@@ -1,0 +1,89 @@
+#file: noinspection HttpUrlsUsage
+services:
+  pg:
+    container_name: prf_postgres
+    image: postgres:latest
+
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-testdb}
+      POSTGRES_USER: ${POSTGRES_USER:-testdb}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
+    expose:
+      - $${POSTGRES_PORT}
+
+    healthcheck:
+      test: bash -c "pg_isready -p $${POSTGRES_PORT} -U $${POSTGRES_USER}"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: "unless-stopped"
+
+  alembic:
+    container_name: prf_alembic
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    depends_on:
+      pg:
+        condition: service_healthy
+
+    env_file:
+      - .env
+
+    volumes:
+      - ./src/alembic:/deploy/src/alembic
+      - ./alembic.ini:/deploy/alembic.ini
+      - ./Makefile:/deploy/Makefile
+
+    command: bash -c "make migration_run"
+
+    restart: "no"
+
+  web:
+    container_name: prf_web
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    depends_on:
+      alembic:
+        condition: service_completed_successfully
+
+    env_file:
+      - .env
+    environment:
+      UVICORN_HOST: ${UVICORN_HOST:-0.0.0.0}
+      UVICORN_PORT: ${UVICORN_PORT:-8000}
+
+    volumes:
+      - ./src:/deploy/src
+      - ./.env:/deploy/.env
+      - ./Makefile:/deploy/Makefile
+      - ./pyproject.toml:/deploy/pyproject.toml
+
+    ports:
+      - ${UVICORN_PORT:-8000}:${UVICORN_PORT:-8000}
+
+    command: bash -c "make web"
+
+    healthcheck:
+      test: bash -c "curl http://web:$${UVICORN_PORT}/health"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: "always"
+
+volumes:
+  pgdata:

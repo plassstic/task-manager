@@ -1,0 +1,1 @@
+# plassstic's FastAPI & SQLAlchemy template
