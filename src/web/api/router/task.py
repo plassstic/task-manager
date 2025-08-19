@@ -4,8 +4,6 @@ import fastapi.requests
 from fastapi import APIRouter
 
 from src.database.service import TaskService
-from src.utility import APIErrorSpecs
-from src.web.api.exception import APIException
 from src.web.schema.common import ResponseSO
 from src.web.schema.in_ import PaginationSI, TaskCreateSI, TaskUpdateSI
 from src.web.schema.out import TaskSO

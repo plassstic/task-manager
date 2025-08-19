@@ -3,12 +3,12 @@ from contextlib import asynccontextmanager
 
 from loguru import logger
 from sqlalchemy.ext.asyncio import (
-	async_sessionmaker,
 	AsyncSession,
+	async_sessionmaker,
 	create_async_engine,
 )
 
-from src.utility.config import get_cached_settings
+from src.utility import get_cached_settings
 
 global engine, session_factory
 
