@@ -37,11 +37,10 @@ async def async_database_context() -> AsyncGenerator[AsyncSession]:
 			await session.commit()
 		except Exception as exc:
 			logger.exception(
-					"[database] caught an exception in async_db_ctx: {}; {}",
-	                exc.__class__.__name__,
-	                str(exc)[:min(len(str(exc)), 50)]
+					"[database] caught an exception while in async_db_ctx: {};",
+	                exc.__class__.__name__
 			)
 			await session.rollback()
-			raise
+			raise exc
 		finally:
 			await session.close()
